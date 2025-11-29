@@ -9,6 +9,9 @@ Pastikan komputer kamu sudah ter-install perangkat lunak berikut:
 
     Docker
     Docker Compose (Versi terbaru sudah terintegrasi dengan Docker)
+    Akun Pagerduty
+    Akun Brevo
+    
 ## Installation
 
 ### Langkah 1: Clone Repository
@@ -101,3 +104,21 @@ Jika kamu melakukan perubahan pada code. Maka wajib melakukan perintah `docker-c
 
 ### N8N Nodes
 Buat Nodes  dan  ikuti konfigurasi seperti sebagai berikut
+<img width="1296" height="614" alt="Screenshot From 2025-11-29 13-35-38" src="https://github.com/user-attachments/assets/442d2df0-1c56-4c01-89c7-9d7ecb70a857" />
+
+`IF`
+
+<img width="1848" height="958" alt="Screenshot From 2025-11-29 13-40-13" src="https://github.com/user-attachments/assets/a1969619-5a2a-4594-b617-b03c19214537" />
+
+`HTTP Request`
+
+<img width="1848" height="958" alt="Screenshot From 2025-11-29 13-40-32" src="https://github.com/user-attachments/assets/7c6fa6f0-ca84-4c8d-bebb-42c9d69e3d5f" />
+
+`Pagerduty Create an Incident`
+
+<img width="1848" height="958" alt="Screenshot From 2025-11-29 13-40-55" src="https://github.com/user-attachments/assets/859464c7-d89d-40cd-98ec-f0c93fbe79b5" />
+
+`Brevo Send a Transactional email`
+
+<img width="1848" height="958" alt="Screenshot From 2025-11-29 13-42-01" src="https://github.com/user-attachments/assets/90007e62-3416-4184-ab90-c4d17426c294" />
+
