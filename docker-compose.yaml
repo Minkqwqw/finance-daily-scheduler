@@ -1,0 +1,93 @@
+version: '3.8'
+
+services:
+  # 1. Storage: MinIO
+  minio:
+    image: minio/minio
+    container_name: minio-server
+    command: server /data --console-address ":9001"
+    ports:
+      - "9000:9000" # API port
+      - "9001:9001" # Console UI
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    volumes:
+      - minio_data:/data
+    networks:
+      - finance-net
+    restart: unless-stopped
+
+  # 2. Workflow: n8n
+  n8n:
+    image: docker.n8n.io/n8nio/n8n
+    container_name: n8n-server
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_SECURE_COOKIE=false
+    volumes:
+      - n8n_data:/home/node/.n8n
+    networks:
+      - finance-net
+    restart: unless-stopped
+
+  # 3. Batch Script (Logic Maker)
+  # Container ini akan 'standby', Ofelia akan execute command di dalamnya
+  batch-job:
+    build: ./batch-processor
+    container_name: batch-processor
+    command: ["tail", "-f", "/dev/null"] # Biar container gak mati (Idle mode)
+    environment:
+      - MINIO_ENDPOINT=${MINIO_ENDPOINT}
+      - MINIO_ACCESS_KEY=${MINIO_ROOT_USER}
+      - MINIO_SECRET_KEY=${MINIO_ROOT_PASSWORD}
+      - MINIO_BUCKET=${MINIO_BUCKET_NAME}
+      - N8N_WEBHOOK=${N8N_WEBHOOK_URL}
+      - TZ=Asia/Jakarta
+    networks:
+      - finance-net
+    restart: unless-stopped
+
+  # 4. Scheduler: Ofelia
+  ofelia:
+    image: mcuadros/ofelia:latest
+    container_name: ofelia-scheduler
+    depends_on:
+      - batch-job
+    command: daemon --config=/etc/ofelia/config.ini
+    environment:
+      - OFELIA_DEBUG=true
+      - TZ=Asia/Jakarta
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - ./ofelia/config.ini:/etc/ofelia/config.ini:ro
+    networks:
+      - finance-net
+    restart: unless-stopped
+
+  # 5. Web UI: Streamlit
+  web-ui:
+    build: ./web-ui
+    container_name: finance-dashboard
+    ports:
+      - "8501:8501"
+    environment:
+      - MINIO_ENDPOINT=${MINIO_ENDPOINT}
+      - MINIO_ACCESS_KEY=${MINIO_ROOT_USER}
+      - MINIO_SECRET_KEY=${MINIO_ROOT_PASSWORD}
+      - MINIO_BUCKET=${MINIO_BUCKET_NAME}
+      - N8N_WEBHOOK=${N8N_WEBHOOK_URL}
+      - TZ=Asia/Jakarta
+    networks:
+      - finance-net
+    restart: unless-stopped
+
+networks:
+  finance-net:
+
+volumes:
+  minio_data:
+  n8n_data:
