@@ -116,7 +116,8 @@ Buat Nodes  dan  ikuti konfigurasi seperti sebagai berikut
 
 `Pagerduty Create an Incident`
 
-<img width="1848" height="958" alt="Screenshot From 2025-11-29 13-40-55" src="https://github.com/user-attachments/assets/859464c7-d89d-40cd-98ec-f0c93fbe79b5" />
+![WhatsApp Image 2025-12-01 at 4 01 41 PM](https://github.com/user-attachments/assets/827be1d1-cfb1-4b21-b8bf-d4bb7cd95854)
+
 
 `Brevo Send a Transactional email`
 
