@@ -37,6 +37,7 @@ Isi file tersebut dengan format berikut:
 
     # n8n Config (Webhook yang nanti kamu buat di n8n)
     # Ganti bagian 'your-webhook-uuid' setelah setup n8n
+    # Linknya harus menggunakan http://n8n:5678 JANGAN PAKAI localhost
     N8N_WEBHOOK_URL=http://n8n:5678/your_webhook_URL
 
     Catatan: Ganti your_username, your_password dengan nilai yang kamu inginkan.
